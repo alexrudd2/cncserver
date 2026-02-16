@@ -11,7 +11,7 @@
     "connect-slashes": "techninja/connect-slashes#ignore-files",
     "express": "^5.0.0",
     "ini": "^3.0.1",
-    "nconf": "^0.12.0",
+    "nconf": "^0.13.0",
     "request": "^2.88.2",
     "serialport": "^10.5.0",
     "socket.io": "^4.5.4"
