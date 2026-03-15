@@ -10,7 +10,7 @@
     "body-parser": "^1.20.1",
     "connect-slashes": "techninja/connect-slashes#ignore-files",
     "express": "^5.0.0",
-    "ini": "^3.0.1",
+    "ini": "^6.0.0",
     "nconf": "^0.13.0",
     "request": "^2.88.2",
     "serialport": "^13.0.0",
