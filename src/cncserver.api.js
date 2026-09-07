@@ -6,10 +6,10 @@
  *
  */
 
-module.exports = function(cncserver) {
+module.exports = (cncserver) => {
   // CNC Server API ============================================================
   // Return/Set CNCServer Configuration ========================================
-  cncserver.createServerEndpoint("/v1/settings", function(req){
+  cncserver.createServerEndpoint("/v1/settings", (req)=> {
     if (req.method === 'GET') { // Get list of tools
       return {code: 200, body: {
         global: '/v1/settings/global',
@@ -20,7 +20,7 @@ module.exports = function(cncserver) {
     }
   });
 
-  cncserver.createServerEndpoint("/v1/settings/:type", function(req){
+  cncserver.createServerEndpoint("/v1/settings/:type", (req)=> {
     // Sanity check type
     var setType = req.params.type;
     if (setType !== 'global' && setType !== 'bot'){
@@ -60,10 +60,10 @@ module.exports = function(cncserver) {
   });
 
   // Return/Set PEN state  API =================================================
-  cncserver.createServerEndpoint("/v1/pen", function(req, res){
+  cncserver.createServerEndpoint("/v1/pen", (req, res)=> {
     if (req.method === 'PUT') {
       // SET/UPDATE pen status
-      cncserver.control.setPen(req.body, function(stat){
+      cncserver.control.setPen(req.body, (stat)=> {
         var code = 200;
         var body = {};
 
@@ -87,14 +87,14 @@ module.exports = function(cncserver) {
       return true; // Tell endpoint wrapper we'll handle the response
     } else if (req.method === 'DELETE'){
       // Reset pen to defaults (park)
-      cncserver.control.setHeight('up', function(){
+      cncserver.control.setHeight('up', ()=> {
         cncserver.control.setPen({
           x: cncserver.bot.park.x,
           y: cncserver.bot.park.y,
           park: true,
           ignoreTimeout: req.body?.ignoreTimeout,
           skipBuffer: req.body?.skipBuffer
-        }, function(stat){
+        }, (stat)=> {
           var code = 200;
           var body = {};
 
@@ -126,7 +126,7 @@ module.exports = function(cncserver) {
   });
 
   // Return/Set Motor state API ================================================
-  cncserver.createServerEndpoint("/v1/motors", function(req){
+  cncserver.createServerEndpoint("/v1/motors", (req)=> {
     // Disable/unlock motors
     if (req.method === 'DELETE') {
       cncserver.run('custom', cncserver.buffer.cmdstr('disablemotors'));
@@ -149,7 +149,7 @@ module.exports = function(cncserver) {
         cncserver.pen.x = park.x;
         cncserver.pen.y = park.y;
 
-        cncserver.run('callback', function(){
+        cncserver.run('callback', ()=> {
           // Set actualPen position. This is the ONLY place we set this value
           // without a movement, because it's assumed to have been moved there
           // physically by a user. Also we're assuming they did it instantly!
@@ -173,7 +173,7 @@ module.exports = function(cncserver) {
   });
 
   // Command buffer API ========================================================
-  cncserver.createServerEndpoint("/v1/buffer", function(req, res){
+  cncserver.createServerEndpoint("/v1/buffer", (req, res)=> {
     var buffer = cncserver.buffer;
     if (req.method === 'GET' || req.method === 'PUT') {
       // Pause/resume (normalize input)
@@ -223,13 +223,13 @@ module.exports = function(cncserver) {
           console.log('Moving back to pre-pause position...');
 
           // Set the pen up before moving to resume position
-          cncserver.control.setHeight('up', function(){
-            cncserver.control.actuallyMove(buffer.pausePen, function(){
+          cncserver.control.setHeight('up', ()=> {
+            cncserver.control.actuallyMove(buffer.pausePen, ()=> {
               // Set the height back to what it was AFTER moving
               cncserver.control.actuallyMoveHeight(
                 buffer.pausePen.height,
                 buffer.pausePen.state,
-                function(){
+                ()=> {
                   console.log('Resuming buffer!');
                   buffer.resume();
 
@@ -268,7 +268,7 @@ module.exports = function(cncserver) {
         // Wait until last item has finished before returning
         console.log('Waiting for last item to finish...');
 
-        buffer.pauseCallback = function(){
+        buffer.pauseCallback = ()=> {
           res.status(200).send(JSON.stringify({
             running: buffer.running,
             paused: buffer.paused,
@@ -304,7 +304,7 @@ module.exports = function(cncserver) {
   });
 
   // Get/Change Tool API =======================================================
-  cncserver.createServerEndpoint("/v1/tools", function(req){
+  cncserver.createServerEndpoint("/v1/tools", (req)=> {
     if (req.method === 'GET') { // Get list of tools
       return {code: 200, body:{
         tools: Object.keys(cncserver.botConf.get('tools'))
@@ -314,12 +314,12 @@ module.exports = function(cncserver) {
     }
   });
 
-  cncserver.createServerEndpoint("/v1/tools/:tool", function(req, res){
+  cncserver.createServerEndpoint("/v1/tools/:tool", (req, res)=> {
     var toolName = req.params.tool;
     // TODO: Support other tool methods... (needs API design!)
     if (req.method === 'PUT') { // Set Tool
       if (cncserver.botConf.get('tools:' + toolName)){
-        cncserver.control.setTool(toolName, function(){
+        cncserver.control.setTool(toolName, ()=> {
           cncserver.pen.tool = toolName;
           res.status(200).send(JSON.stringify({
             status: 'Tool changed to ' + toolName
