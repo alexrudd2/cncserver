@@ -92,8 +92,8 @@ module.exports = function(cncserver) {
           x: cncserver.bot.park.x,
           y: cncserver.bot.park.y,
           park: true,
-          ignoreTimeout: req.body.ignoreTimeout,
-          skipBuffer: req.body.skipBuffer
+          ignoreTimeout: req.body?.ignoreTimeout,
+          skipBuffer: req.body?.skipBuffer
         }, function(stat){
           var code = 200;
           var body = {};
@@ -105,13 +105,13 @@ module.exports = function(cncserver) {
             body = cncserver.pen;
           }
 
-          body = JSON.stringify(body);
+          body = JSON.stringify(body) ?? {};
           res.status(code).send(body);
           if (cncserver.gConf.get('debug')) {
             console.log(">RESP", req.route.path, code, body);
           }
         });
-      }, req.body.skipBuffer);
+      }, req.body?.skipBuffer);
 
       return true; // Tell endpoint wrapper we'll handle the response
     } else if (req.method === 'GET'){
