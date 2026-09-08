@@ -8,7 +8,7 @@ var turtle = {}; // Global turtle state object.
 var sizeMultiplier = 10; // Amount to increase size of steps
 var cncserver = {}; // Globally available cncserver obj (for this module).
 
-exports.initAPI = function (cncserverArg) {
+exports.initAPI = (cncserverArg) => {
   cncserver = cncserverArg;
   console.info('Scratch v2 Programming support ENABLED');
   var pollData = {}; // "Array" of "sensor" data to be spat out to poll page
@@ -64,7 +64,7 @@ exports.initAPI = function (cncserverArg) {
 
   // Helper function to add/remove busy watchers
   // TODO: Not fully implemented as performance is better without waiting.
-  pollData.busy = function(id, destroy) {
+  pollData.busy = (id, destroy) => {
     if (!pollData._busy) pollData._busy = []; // Add busy placeholder)
 
     var index = pollData._busy.indexOf(id);
@@ -79,23 +79,19 @@ exports.initAPI = function (cncserverArg) {
 
   // SCRATCH v2 Specific endpoints =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
   // Central poll returner (Queried ~30hz)
-  cncserver.createServerEndpoint("/poll", function(){
-    return {code: 200, body: pollData.render()};
-  });
+  cncserver.createServerEndpoint("/poll", () => ({code: 200, body: pollData.render()}));
 
   // Flash crossdomain helper
-  cncserver.createServerEndpoint("/crossdomain.xml", function(){
-    return {
+  cncserver.createServerEndpoint("/crossdomain.xml", () => ({
       code: 200,
       body:
         '<?xml version="1.0" ?><cross-domain-policy>' +
         '<allow-access-from domain="*" to-ports="' +
         cncserver.gConf.get('httpPort') + '"/></cross-domain-policy>'
-    };
-  });
+    }));
 
   // Initialize/reset status
-  cncserver.createServerEndpoint("/reset_all", function(){
+  cncserver.createServerEndpoint("/reset_all", () => {
     turtle = { // Reset to default
       x: cncserver.bot.workArea.absCenter.x,
       y: cncserver.bot.workArea.absCenter.y,
@@ -132,7 +128,7 @@ exports.initAPI = function (cncserverArg) {
   cncserver.createServerEndpoint("/move.nudge.y./:arg2", moveRequest);
 
   // Reink initialization endpoint
-  cncserver.createServerEndpoint("/penreink/:distance", function(req) {
+  cncserver.createServerEndpoint("/penreink/:distance", (req) => {
     // 167.7 = 1.6mm per step * 100 mm per cm (as input)
     var cm = parseFloat(req.params.distance);
     turtle.reinkDistance = Math.round(cm * 167.7);
@@ -142,7 +138,7 @@ exports.initAPI = function (cncserverArg) {
 
 
   // Stop Reinking endpoint
-  cncserver.createServerEndpoint("/penstopreink", function() {
+  cncserver.createServerEndpoint("/penstopreink", () => {
     turtle.reinkDistance = 0;
     console.log('Reink distance: ', turtle.reinkDistance);
     return {code: 200, body: ''};

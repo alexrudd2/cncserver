@@ -5,7 +5,7 @@
  * functions for calculating movement command generation for CNC Server!
  */
 
-module.exports = function(cncserver) {
+module.exports = (cncserver) => {
   var extend = require('util')._extend;      // Util for cloning objects
 
   cncserver.control = {};
@@ -19,7 +19,7 @@ module.exports = function(cncserver) {
    * @param callback
    *   Callback triggered when intended action should be complete.
    */
-  cncserver.control.setPen = function(inPen, callback) {
+  cncserver.control.setPen = (inPen, callback) => {
     // Force the distanceCounter to be a number (was coming up as null)
     cncserver.pen.distanceCounter = parseFloat(cncserver.pen.distanceCounter);
 
@@ -146,7 +146,7 @@ module.exports = function(cncserver) {
    *   Set to true to skip adding the command to the buffer and run it
    *   immediately.
    */
-  cncserver.control.setHeight = function(state, callback, skipBuffer) {
+  cncserver.control.setHeight = (state, callback, skipBuffer) => {
     var stateValue = null; // Placeholder for what to normalize the pen state to
     var height = 0; // Placeholder for servo height value
     var servoDuration = cncserver.botConf.get('servo:duration');
@@ -185,7 +185,7 @@ module.exports = function(cncserver) {
     // Height movement callback servo movement duration offset
     var delay = servoDuration - cncserver.gConf.get('bufferLatencyOffset');
     if (callback) {
-      setTimeout(function(){
+      setTimeout(() => {
         callback(1);
       }, Math.max(delay, 0));
     }
@@ -205,7 +205,7 @@ module.exports = function(cncserver) {
    * @returns {boolean}
    *   True if success, false on failure.
    */
-  cncserver.control.setTool = function(toolName, callback, ignoreTimeout) {
+  cncserver.control.setTool = (toolName, callback, ignoreTimeout) => {
     // Parse out any virtual indexes (pipe delimited) from the tool name.
     // These are passed by clients to assist users for manual tool swaps, but
     // doesn't actually do anything differently.
@@ -239,15 +239,15 @@ module.exports = function(cncserver) {
       // Queue a callback to pause continued execution on tool.wait value
       if (tool.wait) {
         var moveDuration = cncserver.pen.lastDuration;
-        cncserver.run('callback', function() {
+        cncserver.run('callback', () => {
           cncserver.buffer.pause();
           cncserver.buffer.newlyPaused = true;
 
           // Trigger the manualswap with virtual index for the client/user.
-          cncserver.buffer.pauseCallback = function() {
+          cncserver.buffer.pauseCallback = () => {
             cncserver.buffer.pauseCallback = null;
             cncserver.buffer.newlyPaused = false;
-            setTimeout(function() {
+            setTimeout(() => {
               cncserver.io.manualSwapTrigger(vIndex);
             }, moveDuration);
           };
@@ -300,7 +300,7 @@ module.exports = function(cncserver) {
    * @returns {number}
    *   Distance moved from previous position, in steps.
    */
-  cncserver.control.movePenAbs = function(inPoint, callback, immediate, skip) {
+  cncserver.control.movePenAbs = (inPoint, callback, immediate, skip) => {
     // Something really bad happened here...
     if (isNaN(inPoint.x) || isNaN(inPoint.y)){
       console.error('INVALID Move pen input, given:', inPoint);
@@ -438,7 +438,7 @@ module.exports = function(cncserver) {
         if (cmdDuration < 2) {
           callback(cncserver.pen);
         } else {
-          setTimeout(function(){
+          setTimeout(() => {
             callback(cncserver.pen);
           }, cmdDuration);
         }
@@ -456,7 +456,7 @@ module.exports = function(cncserver) {
    * @param {boolean} newValue
    *   Pass true when moving "off screen", false when moving back into bounds
    */
-  cncserver.control.offCanvasChange = function (newValue) {
+  cncserver.control.offCanvasChange = (newValue) => {
     // Only do anything if the value is different
     if (cncserver.pen.offCanvas !== newValue) {
       cncserver.pen.offCanvas = newValue;
@@ -466,7 +466,7 @@ module.exports = function(cncserver) {
           // current known state so we can come back to it when we return to
           // bounds),but DO change the buffer tip height so that is reflected on
           // actualPen if it's every copied over on buffer execution.
-          cncserver.run('callback', function() {
+          cncserver.run('callback', () => {
             cncserver.control.setHeight('up', false, true);
             cncserver.pen.height = cncserver.utils.stateToHeight('up').height;
           });
@@ -493,7 +493,7 @@ module.exports = function(cncserver) {
    * @param {function} callback
    *   Optional, callback for when operation should have completed.
    */
-  cncserver.control.actuallyMove = function(destination, callback) {
+  cncserver.control.actuallyMove = (destination, callback) => {
     // Get the amount of change/duration from difference between actualPen and
     // absolute position in given destination
     var change = cncserver.utils.getPosChangeData(
@@ -531,7 +531,7 @@ module.exports = function(cncserver) {
 
     // Delayed callback (if used)
     if (callback) {
-      setTimeout(function(){
+      setTimeout(() => {
         callback(1);
       }, Math.max(cncserver.control.commandDuration, 0));
     }
@@ -549,7 +549,7 @@ module.exports = function(cncserver) {
    * @param {function} cb
    *   Optional, callback for when operation should have completed.
    */
-  cncserver.control.actuallyMoveHeight = function(height, stateValue, cb) {
+  cncserver.control.actuallyMoveHeight = (height, stateValue, cb) => {
     var change = cncserver.utils.getHeightChangeData(
       cncserver.actualPen.height,
       height
@@ -582,7 +582,7 @@ module.exports = function(cncserver) {
 
     // Delayed callback (if used)
     if (cb) {
-      setTimeout(function(){
+      setTimeout(() => {
         cb(1);
       }, Math.max(cncserver.control.commandDuration, 0));
     }
@@ -599,7 +599,7 @@ module.exports = function(cncserver) {
    * @param {integer} iterations
    *   How many times to move.
    */
-  cncserver.control.wigglePen = function(axis, travel, iterations){
+  cncserver.control.wigglePen = (axis, travel, iterations)=> {
     var start = {x: Number(cncserver.pen.x), y: Number(cncserver.pen.y)};
     var i = 0;
     travel = Number(travel); // Make sure it's not a string

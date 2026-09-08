@@ -19,7 +19,7 @@ cncserver.cmd = {
   },
 
   // CMD specific callback handler
-  cb: function(d) {
+  cb: (d) => {
     if (!cncserver.cmd.buffer.length) {
       cncserver.cmd.process.busy = false;
       cncserver.cmd.process.max = 0;
@@ -34,7 +34,7 @@ cncserver.cmd = {
     }
   },
 
-  executeNext: function(executeCallback) {
+  executeNext: (executeCallback) => {
     if (!cncserver.cmd.buffer.length) {
       cncserver.cmd.cb();
       return;
@@ -85,7 +85,7 @@ cncserver.cmd = {
   run: function(){
     if (typeof arguments[0] == "object") {
       cncserver.cmd.process.max+= arguments.length;
-      $.each(arguments[0], function(i, args){
+      $.each(arguments[0], (i, args)=> {
         cncserver.cmd.buffer.unshift(args);
       });
     } else {
@@ -95,14 +95,14 @@ cncserver.cmd = {
   },
 
   // Clear out the buffer
-  clear: function() {
+  clear: () => {
     cncserver.cmd.buffer = [];
   }
 };
 
 // Wait around for the buffer to contain elements, and for us to not be
 // currently processing the buffer queue
-setInterval(function(){
+setInterval(() => {
   if (!cncserver.cmd.process.busy && cncserver.cmd.buffer.length && !cncserver.cmd.process.paused) {
     cncserver.cmd.executeNext();
   }

@@ -5,7 +5,7 @@
  *
  */
 
-module.exports = function(cncserver) {
+module.exports = (cncserver) => {
   var nconf = require('nconf'); // Configuration and INI file.
   var fs = require('fs');       // File System management.
   var path = require('path');   // Path management and normalization.
@@ -25,14 +25,14 @@ module.exports = function(cncserver) {
    * @param {function} cb
    *   Optional callback triggered when complete.
    */
-  cncserver.settings.loadGlobalConfig = function(cb) {
+  cncserver.settings.loadGlobalConfig = (cb) => {
     // Pull conf from file
     var configPath = path.resolve(__dirname, '..', 'config.ini');
     cncserver.gConf.reset();
     cncserver.gConf.use('file', {
       file: configPath,
       format: nconf.formats.ini
-    }).load(function (){
+    }).load(() => {
       // Set Global Config Defaults
       cncserver.gConf.defaults(cncserver.globalConfigDefaults);
 
@@ -67,7 +67,7 @@ module.exports = function(cncserver) {
    *   Optional, the machine name for the bot type to load. Defaults to the
    *   globally configured bot type.
    */
-  cncserver.settings.loadBotConfig = function (cb, botType) {
+  cncserver.settings.loadBotConfig = (cb, botType) => {
     if (!botType) botType = cncserver.gConf.get('botType');
 
     var botFile = path.resolve(
@@ -90,7 +90,7 @@ module.exports = function(cncserver) {
       cncserver.botConf.use('file', {
         file: botFile,
         format: nconf.formats.ini
-      }).load(function(){
+      }).load(() => {
 
         // Mesh in bot overrides from main config
         var overrides = cncserver.gConf.get('botOverride');
@@ -122,7 +122,7 @@ module.exports = function(cncserver) {
         };
 
         // Check if a point is within the work area.
-        cncserver.bot.inWorkArea = function(point) {
+        cncserver.bot.inWorkArea = (point) => {
           var area = cncserver.bot.workArea;
           if (point.x > area.right || point.x < area.left) {
             return false;
@@ -177,7 +177,7 @@ module.exports = function(cncserver) {
    * @return {object}
    *   A keyed array/object of all supported bot configurations and data.
    */
-  cncserver.settings.getSupportedBots = function() {
+  cncserver.settings.getSupportedBots = () => {
     var ini = require('ini');
     var list = fs.readdirSync(path.resolve(__dirname, '..', 'machine_types'));
     var out = {};
