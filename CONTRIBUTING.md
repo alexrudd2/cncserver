@@ -4,7 +4,7 @@ Thanks for considering contributing to cncserver!
 
 ## Opening issues
 
-If you find a bug, please feel free to [open an issue](https://github.com/techninja/cncserver/issues).
+If you find a bug, please feel free to [open an issue](https://github.com/alexrudd2/cncserver/issues).
 
 If you taking the time to mention a problem, even a seemingly minor one, it is greatly appreciated, and a totally valid contribution to this project. Thank you!
 
@@ -12,10 +12,10 @@ If you taking the time to mention a problem, even a seemingly minor one, it is g
 
 We love pull requests. Here’s a quick guide:
 
-1. [Fork this repository](https://github.com/techninja/cncserver/fork) and then clone it locally:
+1. [Fork this repository](https://github.com/alexrudd2/cncserver/fork) and then clone it locally:
 
   ```bash
-  git clone https://github.com/techninja/cncserver
+  git clone https://github.com/alexrudd2/cncserver
   ```
 
 2. Create a topic branch for your changes:
@@ -53,4 +53,4 @@ We love pull requests. Here’s a quick guide:
 
 ## Adding new features
 
-Thinking of adding a new feature? Cool! [Open an issue](https://github.com/techninja/cncserver/issues) and let’s design it together.
+Thinking of adding a new feature? Cool! [Open an issue](https://github.com/alexrudd2/cncserver/issues) and let’s design it together.

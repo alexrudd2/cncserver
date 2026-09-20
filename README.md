@@ -1,6 +1,6 @@
 # CNC server
 
-<img src="https://github.com/techninja/cncserver/blob/v3/src/interface/icon.png?raw=true" style="float: right">
+<img src="https://github.com/alexrudd2/cncserver/blob/v3/src/interface/icon.png?raw=true" style="float: right">
 
 A [Node.js](https://nodejs.org/) based RESTful API to serial interface control for plotters, originally
 created for the [WaterColorBot](http://watercolorbot.com), currently aimed at [EBB controller](https://shop.evilmadscientist.com/productsmenu/188) based plotters from [Evil Mad Scientist Laboratories](https://www.evilmadscientist.com/) like
@@ -8,6 +8,7 @@ created for the [WaterColorBot](http://watercolorbot.com), currently aimed at [E
 
 The purpose of the project is to abstract the nitty-gritty details for controlling a drawing robot, and utilizing proven web technologies, to simplify the interface and make drawing bots easier and more useful, either at your desk with a GUI, or via your own script running remotely.
 
+Forked from the unmaintained original at https://github.com/techninja/cncserver/
 ## Features
 
 CNC Server is an application that sits on a computer connected to your serial
@@ -39,10 +40,10 @@ Unless you already have it installed, either download [the installer for your op
 
 - **For easy updating from master:** Use the handy GUI! Click the
   "Clone in Mac/Windows" button at the top of the
-  [GitHub repo homepage](https://github.com/techninja/cncserver). When new code
+  [GitHub repo homepage](https://github.com/alexrudd2/cncserver). When new code
   updates come along, just click the refresh/sync button and you'll be up to date!
 - **For quick use:** Download the files
-  [here](https://github.com/techninja/cncserver/archive/master.zip), unzip them to
+  [here](https://github.com/alexrudd2/cncserver/archive/master.zip), unzip them to
   a handy folder, and you're ready to run!
 - **For developers looking to improve it:** Fork the repo, make your changes in
   a branch, and submit a pull request! We're always looking for contributions that
@@ -90,13 +91,13 @@ node cncserver --botType=eggbot --invertAxis:x=true
 ## Problems?
 
 **_Stuck on something?_** Submit an issue! Click the
-[issues tab](https://github.com/techninja/cncserver/issues) and see if someone
+[issues tab](https://github.com/alexrudd2/cncserver/issues) and see if someone
 is covering your question or problem, if not, ask away! Someone will be around
 to help soon.
 
 **_Know how to fix a problem? Or want to add a new feature??_** Submit a pull
 request! Just fork the repo using the button on the
-[cncserver github homepage](https://github.com/techninja/cncserver), and this
+[cncserver github homepage](https://github.com/alexrudd2/cncserver), and this
 will give you your own version of cncserver. Make your change in a few commits
 to your branch, then click the pull request button at the top! Talk about what
 changes you made and submit. A maintainer of the project will check your work,

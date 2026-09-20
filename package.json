@@ -1,9 +1,13 @@
 {
-  "name": "cncserver",
-  "version": "2.9.3",
+  "name": "@alexrudd2/cncserver",
+  "version": "2.9.4",
   "description": "A web based a web based CNC Server/Controller to drive @makersylvia's WaterColorBot and beyond",
   "main": "cncserver.js",
   "author": "techninja",
+  "maintainers": [{
+    "name": "Alex Ruddick",
+    "email": "alex@ruddick.tech"
+  }],
   "license": "MIT",
   "dependencies": {
     "@node-ipc/node-ipc": "^11.0.3",
@@ -20,7 +24,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/techninja/cncserver.git"
+    "url": "https://github.com/alexrudd2/cncserver.git"
   },
   "scripts": {
     "start": "node cncserver",
